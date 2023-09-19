@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: release
-      url: https://pypi.org/project/plover-run-applescript/
+      url: https://pypi.org/project/plover-local-env-var/
     permissions:
       id-token: write
     steps:
