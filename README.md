@@ -64,26 +64,6 @@ get returned quicker.
 
 ## Install
 
-Until this plugin is [added to the Plover registry][], download from GitHub or
-clone using [git][]:
-
-```sh
-git clone git@github.com:paulfioravanti/plover-local-env-var.git
-cd plover-local-env-var
-plover -s plover_plugins install .
-```
-
-> Where `plover` in the command is a reference to your locally installed version
-> of Plover. See the [Invoke Plover from the command line][] page for details on
-> how to create that reference.
-
-- Restart Plover, open the Configuration screen (either click the Configuration
-  icon, or from the main Plover application menu, select `Preferences...`)
-- Open the Plugins tab
-- Check the box next to `plover_local_env_var` to activate the plugin
-
-\[Future\] Once this plugin is added to the Plover registry:
-
 1. In the Plover application, open the Plugins Manager (either click the Plugins
    Manager icon, or from the `Tools` menu, select `Plugins Manager`).
 2. From the list of plugins, find `plover-local-env-var`
@@ -162,7 +142,6 @@ plover -s plover_plugins install .
 > of Plover. See the [Invoke Plover from the command line][] page for details on
 > how to create that reference.
 
-[added to the Plover registry]: https://github.com/openstenoproject/plover_plugins_registry/pull/43
 [AppleScript]: https://en.wikipedia.org/wiki/AppleScript
 [Build Status image]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml
