@@ -5,6 +5,8 @@ import os
 import re
 
 _ENV_VAR = re.compile(r"(\$[A-Za-z_][A-Za-z_0-9]*)")
+_DEFAULT_SHELL = "bash"
+_INTERACTIVE_SHELLS = ["zsh", "bash"]
 
 def expand_env_var(var: str) -> str:
     """
@@ -16,10 +18,12 @@ def expand_env_var(var: str) -> str:
     if not re.match(_ENV_VAR, var):
         raise ValueError(f"Provided value not an $ENV_VAR: {var}")
 
-    # NOTE: Using os.popen with an interactive mode bash command
-    # (bash -ci) seemed to be the only way to access a user's env
-    # vars on their Mac outside Plover's environment.
-    expanded = os.popen(f"bash -ci 'echo {var}'").read().strip()
+    shell = os.environ.get("SHELL", _DEFAULT_SHELL).split("/")[-1]
+    # NOTE: Using an interactive mode command (bash/zsh -ci) seemed to be the
+    # only way to access a user's env vars on a Mac outside Plover's
+    # environment.
+    flags = "-ci" if shell in _INTERACTIVE_SHELLS else "-c"
+    expanded = os.popen(f"{shell} {flags} 'echo {var}'").read().strip()
 
     if not expanded:
         raise ValueError(f"No value found for env var: {var}")
