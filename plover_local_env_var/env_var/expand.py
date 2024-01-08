@@ -4,11 +4,12 @@ Env Var - a module for dealing with fetching local ENV var values.
 import os
 import re
 
+
 _ENV_VAR = re.compile(r"(\$[A-Za-z_][A-Za-z_0-9]*)")
 _DEFAULT_SHELL = "bash"
 _INTERACTIVE_SHELLS = ["zsh", "bash"]
 
-def expand_env_var(var: str) -> str:
+def expand(var: str) -> str:
     """
     Fetches and returns local env var values.
 

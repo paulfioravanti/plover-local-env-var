@@ -4,13 +4,18 @@ Plover entry point extension module for Plover Local Env Var.
     - https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
+from pathlib import Path
+
 from plover.engine import StenoEngine
 from plover.formatting import _Action, _Context
 from plover.machine.base import STATE_RUNNING
+from plover.oslayer.config import CONFIG_DIR
 from plover.registry import registry
 
-from .env_var import expand_env_var
+from . import env_var
 
+
+_CONFIG_FILEPATH = Path(CONFIG_DIR) / "local_env_var.json"
 
 class LocalEnvVar:
     """
@@ -19,7 +24,7 @@ class LocalEnvVar:
     """
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
-        self._env_var_values = {}
+        self._env_var_values = env_var.load_config(_CONFIG_FILEPATH)
 
     def start(self) -> None:
         """
@@ -51,8 +56,12 @@ class LocalEnvVar:
         try:
             env_var_value = self._env_var_values[argument]
         except KeyError:
-            env_var_value = expand_env_var(argument)
+            env_var_value = env_var.expand(argument)
             self._env_var_values[argument] = env_var_value
+            env_var.save_config(
+                _CONFIG_FILEPATH,
+                sorted(self._env_var_values.keys())
+            )
 
         action = ctx.new_action()
         action.text = env_var_value
@@ -69,4 +78,4 @@ class LocalEnvVar:
         made to env vars to be re-read in.
         """
         if machine_state == STATE_RUNNING:
-            self._env_var_values = {}
+            self._env_var_values = env_var.load_config(_CONFIG_FILEPATH)

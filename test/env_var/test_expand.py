@@ -8,15 +8,15 @@ def test_var_not_a_dollar_env_var():
         ValueError,
         match="Provided value not an \\$ENV_VAR: foo"
     ):
-        env_var.expand_env_var("foo")
+        env_var.expand("foo")
 
 def test_no_value_for_var_found(monkeypatch):
     monkeypatch.setenv("FOO", "")
 
     with pytest.raises(ValueError, match="No value found for env var: \\$FOO"):
-        env_var.expand_env_var("$FOO")
+        env_var.expand("$FOO")
 
 def test_returns_expanded_value_of_found_env_var(monkeypatch):
     monkeypatch.setenv("FOO", "Bar")
 
-    assert env_var.expand_env_var("$FOO") == "Bar"
+    assert env_var.expand("$FOO") == "Bar"
