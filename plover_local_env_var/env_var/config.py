@@ -4,7 +4,7 @@ Module to handle reading in the application JSON config file.
 import json
 from pathlib import Path
 
-from .expand import expand
+from .expand import expand_list
 
 
 def load(config_filepath: Path) -> dict[str, str]:
@@ -26,14 +26,7 @@ def load(config_filepath: Path) -> dict[str, str]:
     if not isinstance(config_env_var_names, list):
         raise ValueError("'env_var_names' must be a list")
 
-    env_vars = {}
-    for var_name in config_env_var_names:
-        try:
-            env_vars[var_name] = expand(var_name)
-        except ValueError:
-            # Ignore any env vars with None values
-            continue
-
+    env_vars = expand_list(config_env_var_names)
     env_var_names = sorted(env_vars.keys())
     if env_var_names != config_env_var_names:
         save(config_filepath, env_var_names)

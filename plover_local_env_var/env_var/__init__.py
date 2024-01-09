@@ -6,7 +6,4 @@ A package dealing with:
     - expanding local environment variables and returning their values
 """
 from .expand import expand
-from .config import (
-    load as load_config,
-    save as save_config
-)
+from .config import load, save

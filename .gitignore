@@ -11,3 +11,7 @@ dist/
 
 # Language versioning
 .tool-versions
+
+# Test coverage
+htmlcov/
+.coverage

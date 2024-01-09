@@ -95,7 +95,7 @@ re-read in again.
 
 Clone from GitHub with [git][]:
 
-```sh
+```console
 git clone git@github.com:paulfioravanti/plover-local-env-var.git
 cd plover-local-env-var
 ```
@@ -110,31 +110,29 @@ make sure your local development environment also uses Python 3.9.x.
 
 ### Testing
 
-Tests in this plugin were created with [Pytest][]. Run them with the following
-command:
+[Pytest][] is used for testing in this plugin.
 
-```sh
-pytest
+[Coverage.py][] and [pytest-cov][] are used for test coverage, and to run
+coverage within Pytest.
+
+[Pylint][] is used for code quality.
+
+Run tests, coverage, and linting with the following commands:
+
+```console
+pytest --cov
+pylint plover_local_env_var
 ```
 
 Currently, the only parts able to be tested are ones that do not rely directly
 on Plover.
 
-### Linting
+### Deploying Changes
 
-Attempts have been made to have at least some kind of code quality baseline with
-[Pylint][]. Run the linter over the codebase with the following command:
-
-```sh
-pylint plover_local_env_var
-```
-
-### Testing Changes
-
-After making any code changes, install the plugin into Plover with the following
+After making any code changes, deploy the plugin into Plover with the following
 command:
 
-```sh
+```console
 plover -s plover_plugins install .
 ```
 
@@ -145,6 +143,7 @@ plover -s plover_plugins install .
 [AppleScript]: https://en.wikipedia.org/wiki/AppleScript
 [Build Status image]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml
+[Coverage.py]: https://github.com/nedbat/coveragepy
 [direnv]: https://direnv.net/
 [environment variables]: https://en.wikipedia.org/wiki/Environment_variable
 [exporting]: https://en.wikipedia.org/wiki/Environment_variable#Assignment:_Unix
@@ -163,6 +162,7 @@ plover -s plover_plugins install .
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint
 [Pytest]: https://pytest.org/
+[pytest-cov]: https://github.com/pytest-dev/pytest-cov/
 [`.scpt`]: https://fileinfo.com/extension/scpt
 [shell configuration file]: https://en.wikipedia.org/wiki/Unix_shell#Configuration_files
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
