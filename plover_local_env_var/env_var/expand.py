@@ -46,7 +46,7 @@ def expand_list(var_name_list: list) -> dict[str, str]:
     return valid_env_vars
 
 def _perform_expansion(target: str) -> str:
-    shell = os.environ.get("SHELL", _DEFAULT_SHELL)
+    shell = os.environ.get("SHELL", _DEFAULT_SHELL).split("/")[-1]
     # NOTE: Using an interactive mode command (bash/zsh -ci) seemed to be the
     # only way to access a user's env vars on a Mac outside Plover's
     # environment.

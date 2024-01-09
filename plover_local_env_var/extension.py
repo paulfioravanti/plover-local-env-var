@@ -30,7 +30,7 @@ class LocalEnvVar:
         """
         Sets up the meta plugin and steno engine hooks
         """
-        registry.register_plugin("meta", "env_var", self._env_var)
+        registry.register_plugin("meta", "ENV_VAR", self._env_var)
         self._engine.hook_connect(
             "machine_state_changed",
             self._machine_state_changed
