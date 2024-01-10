@@ -38,5 +38,5 @@ def save(config_filepath: Path, env_var_names: dict[str, str]) -> None:
     Saves the set of env var names to the config JSON file.
     """
     with config_filepath.open("w", encoding="utf-8") as file:
-        json.dump({"env_var_names": env_var_names}, file)
+        json.dump({"env_var_names": env_var_names}, file, indent=2)
         file.close()
