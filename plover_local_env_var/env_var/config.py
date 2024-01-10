@@ -33,7 +33,7 @@ def load(config_filepath: Path) -> dict[str, str]:
 
     return env_vars
 
-def save(config_filepath: Path, env_var_names: dict[str, str]) -> None:
+def save(config_filepath: Path, env_var_names: list[str]) -> None:
     """
     Saves the set of env var names to the config JSON file.
     """
