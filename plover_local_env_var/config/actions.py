@@ -4,7 +4,7 @@ Module to handle reading in the application JSON config file.
 import json
 from pathlib import Path
 
-from .expand import expand_list
+from ..env_var import expand_list
 
 
 def load(config_filepath: Path) -> dict[str, str]:

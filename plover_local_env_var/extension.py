@@ -12,6 +12,7 @@ from plover.machine.base import STATE_RUNNING
 from plover.oslayer.config import CONFIG_DIR
 from plover.registry import registry
 
+from . import config
 from . import env_var
 
 
@@ -24,7 +25,7 @@ class LocalEnvVar:
     """
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
-        self._env_var_values = env_var.load(_CONFIG_FILEPATH)
+        self._env_var_values = config.load(_CONFIG_FILEPATH)
 
     def start(self) -> None:
         """
@@ -58,7 +59,7 @@ class LocalEnvVar:
         except KeyError:
             env_var_value = env_var.expand(argument)
             self._env_var_values[argument] = env_var_value
-            env_var.save(
+            config.save(
                 _CONFIG_FILEPATH,
                 sorted(self._env_var_values.keys())
             )
@@ -78,4 +79,4 @@ class LocalEnvVar:
         made to env vars to be re-read in.
         """
         if machine_state == STATE_RUNNING:
-            self._env_var_values = env_var.load(_CONFIG_FILEPATH)
+            self._env_var_values = config.load(_CONFIG_FILEPATH)
