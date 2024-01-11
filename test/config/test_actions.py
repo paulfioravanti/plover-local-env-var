@@ -30,7 +30,7 @@ def valid_env_var_names_config_path():
     yield path
 
     with path.open("w", encoding="utf-8") as file:
-        json.dump(config_data, file)
+        json.dump(config_data, file, indent=2)
         file.close()
 
 # Tests
