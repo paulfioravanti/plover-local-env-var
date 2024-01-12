@@ -122,7 +122,7 @@ on Plover.
 Run tests, coverage, and linting with the following commands:
 
 ```console
-pytest --cov
+pytest --cov --cov-report=term-missing
 pylint plover_local_env_var
 mypy plover_local_env_var --strict
 ```
