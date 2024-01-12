@@ -110,22 +110,31 @@ make sure your local development environment also uses Python 3.9.x.
 
 ### Testing
 
-[Pytest][] is used for testing in this plugin.
+- [Pytest][] is used for testing in this plugin.
+- [Coverage.py][] and [pytest-cov][] are used for test coverage, and to run
+  coverage within Pytest
+- [Pylint][] is used for code quality
+- [Mypy][] is used for static type checking
 
-[Coverage.py][] and [pytest-cov][] are used for test coverage, and to run
-coverage within Pytest.
-
-[Pylint][] is used for code quality.
+Currently, the only parts able to be tested are ones that do not rely directly
+on Plover.
 
 Run tests, coverage, and linting with the following commands:
 
 ```console
 pytest --cov
 pylint plover_local_env_var
+mypy plover_local_env_var --strict
 ```
 
-Currently, the only parts able to be tested are ones that do not rely directly
-on Plover.
+For fuller test coverage information:
+
+```console
+coverage run --module pytest
+coverage report
+coverage html
+open htmlcov/index.html
+```
 
 ### Deploying Changes
 
@@ -156,6 +165,7 @@ plover -s plover_plugins install .
 ["man-in-the-middle"]: https://en.wikipedia.org/wiki/Man-in-the-middle_attack
 [meta]: https://plover.readthedocs.io/en/latest/plugin-dev/metas.html
 [my steno dictionaries]: https://github.com/paulfioravanti/steno-dictionaries
+[Mypy]: https://github.com/python/mypy
 [`osascript`]: https://ss64.com/osx/osascript.html
 [Plover]: https://www.openstenoproject.org/
 [Plover Run Shell]: https://github.com/user202729/plover_run_shell
