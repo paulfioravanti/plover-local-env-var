@@ -124,14 +124,13 @@ Run tests, coverage, and linting with the following commands:
 ```console
 pytest --cov --cov-report=term-missing
 pylint plover_local_env_var
-mypy plover_local_env_var --strict
+mypy plover_local_env_var
 ```
 
-For fuller test coverage information:
+To get a HTML test coverage report:
 
 ```console
 coverage run --module pytest
-coverage report
 coverage html
 open htmlcov/index.html
 ```
