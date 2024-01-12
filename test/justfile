@@ -1,0 +1,12 @@
+# just --working-directory . --justfile test/justfile
+
+default: test lint typecheck
+
+test:
+  pytest --cov --cov-report=term-missing
+
+lint:
+  pylint plover_local_env_var
+
+typecheck:
+  mypy plover_local_env_var
