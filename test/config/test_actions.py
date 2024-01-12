@@ -38,7 +38,7 @@ def valid_env_var_names_config_path():
 def test_bad_config(bad_config_path):
     with pytest.raises(
         ValueError,
-        match="Config file must contain a JSON object"
+        match="Unable to decode file contents as JSON"
     ):
         config.load(bad_config_path)
 

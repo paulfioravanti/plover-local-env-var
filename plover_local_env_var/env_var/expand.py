@@ -27,7 +27,7 @@ def expand(var: str) -> str:
 
     return expanded
 
-def expand_list(var_name_list: list) -> dict[str, str]:
+def expand_list(var_name_list: list[str]) -> dict[str, str]:
     """
     Returns a dict of env var values from a list of env var names.
 
