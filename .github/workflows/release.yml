@@ -25,14 +25,22 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Install Test/Lint Dependencies
-        run: pip install pytest pylint
+      - name: Install Test, Coverage, Lint, Type Checking Dependencies
+        run: pip install pytest pylint mypy coverage
 
       - name: Run Linter
         run: pylint plover_local_env_var
 
+      - name: Run Type Checker
+        run: mypy plover_local_env_var
+
       - name: Run Tests
         run: pytest
+
+      - name: Run Coverage
+        run: |
+          coverage run --module pytest
+          coverage report --show-missing
 
       - name: Install Build
         run: python -m pip install --upgrade build
