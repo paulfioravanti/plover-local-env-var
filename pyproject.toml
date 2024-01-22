@@ -19,7 +19,7 @@ keywords = [
   "plover",
   "plover_plugin"
 ]
-requires-python = ">=3.9, <3.10"
+requires-python = ">=3.9"
 dependencies = [
   "plover >= 4.0.0.dev12"
 ]
