@@ -31,6 +31,35 @@ order to write them out.
 > (see your `strokes.log` file for what Plover records by default). Use a
 > password manager.
 
+## Install
+
+1. In the Plover application, open the Plugins Manager (either click the Plugins
+   Manager icon, or from the `Tools` menu, select `Plugins Manager`).
+2. From the list of plugins, find `plover-local-env-var`
+3. Click "Install/Update"
+4. When it finishes installing, restart Plover
+5. After re-opening Plover, open the Configuration screen (either click the
+   Configuration icon, or from the main Plover application menu, select
+   `Preferences...`)
+6. Open the Plugins tab
+7. Check the box next to `plover_local_env_var` to activate the plugin
+
+## How To Use
+
+After defining and [exporting][] environment variables in your [shell
+configuration file][], you can use them in your outlines with the `ENV_VAR`
+meta. For an environment variable named `$PHONE_NUMBER`, the outline would look
+like:
+
+```json
+"{:ENV_VAR:$PHONE_NUMBER}"
+```
+
+Pressing the "Disconnect and reconnect the machine" button on the Plover UI
+resets the environment variable cache. If you make any changes to the values
+contained in your environment variables, make sure to press it so they get
+re-read in again.
+
 ## Why a Plugin?
 
 I used to access environment variables from a steno outline like in this
@@ -61,35 +90,6 @@ and reduces the outline above to be just:
 
 All the fetched values also get cached, so subsequent calls to the same env var
 get returned quicker.
-
-## Install
-
-1. In the Plover application, open the Plugins Manager (either click the Plugins
-   Manager icon, or from the `Tools` menu, select `Plugins Manager`).
-2. From the list of plugins, find `plover-local-env-var`
-3. Click "Install/Update"
-4. When it finishes installing, restart Plover
-5. After re-opening Plover, open the Configuration screen (either click the
-   Configuration icon, or from the main Plover application menu, select
-   `Preferences...`)
-6. Open the Plugins tab
-7. Check the box next to `plover_local_env_var` to activate the plugin
-
-## How To Use
-
-After defining and [exporting][] environment variables in your [shell
-configuration file][], you can use them in your outlines with the `ENV_VAR`
-meta. For an environment variable named `$PHONE_NUMBER`, the outline would look
-like:
-
-```json
-"{:ENV_VAR:$PHONE_NUMBER}"
-```
-
-Pressing the "Disconnect and reconnect the machine" button on the Plover UI
-resets the environment variable cache. If you make any changes to the values
-contained in your environment variables, make sure to press it so they get
-re-read in again.
 
 ## Development
 
