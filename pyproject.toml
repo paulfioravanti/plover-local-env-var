@@ -28,7 +28,7 @@ dynamic = [
 ]
 
 [project.urls]
-repository = "https://github.com/paulfioravanti/plover-local-env-var"
+Repository = "https://github.com/paulfioravanti/plover-local-env-var"
 
 [project.entry-points."plover.extension"]
 # "{:ENV_VAR:$USER}"
