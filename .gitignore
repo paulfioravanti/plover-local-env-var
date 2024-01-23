@@ -17,4 +17,4 @@ htmlcov/
 .coverage
 
 # Dynamic version control file
-plover_local_env_var/_version.py
+plover_local_env_var/_version.txt

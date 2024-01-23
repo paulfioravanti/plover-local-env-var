@@ -48,10 +48,13 @@ packages = [
   "plover_local_env_var.env_var"
 ]
 
-[tool.setuptools.dynamic]
-version = {attr = "setuptools_scm.get_version"}
-
 [tool.setuptools_scm]
+version_file = "plover_local_env_var/_version.txt"
+local_scheme = "no-local-version"
+version_scheme = "post-release"
+
+[tool.setuptools.dynamic]
+version = {file = "plover_local_env_var/_version.txt"}
 
 [tool.pytest]
 pythonpath = "plover_local_env_var"
