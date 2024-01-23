@@ -15,6 +15,3 @@ dist/
 # Test coverage
 htmlcov/
 .coverage
-
-# Dynamic version control file
-plover_local_env_var/_version.txt
