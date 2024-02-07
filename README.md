@@ -1,6 +1,6 @@
 # Plover Local Env Var
 
-[![Build Status][Build Status image]][Build Status url] [![linting: pylint][linting image]][linting url]
+[![Build Status][Build Status image]][Build Status url] [![PyPI - Version][PyPI version image]][PyPI url] [![PyPI - Downloads][PyPI downloads image]][PyPI url] [![linting: pylint][linting image]][linting url]
 
 This [Plover][] [extension][] [plugin][] contains a [meta][] that can read in
 and output values stored in local [environment variables][] on your computer.
@@ -170,6 +170,9 @@ plover -s plover_plugins install .
 [Plover Run Shell]: https://github.com/user202729/plover_run_shell
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint
+[PyPI downloads image]:https://img.shields.io/pypi/dm/plover-local-env-var
+[PyPI version image]: https://img.shields.io/pypi/v/plover-local-env-var
+[PyPI url]: https://pypi.org/project/plover-local-env-var/
 [Pytest]: https://pytest.org/
 [pytest-cov]: https://github.com/pytest-dev/pytest-cov/
 [`.scpt`]: https://fileinfo.com/extension/scpt
