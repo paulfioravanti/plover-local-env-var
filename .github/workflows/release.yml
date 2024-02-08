@@ -1,14 +1,11 @@
-name: PyPI Release
+name: Release
 on:
   push:
-    branches:
-      - main
     tags:
-      - "*"
+      - "v*"
 jobs:
   # Adapted from: https://github.com/pypa/gh-action-pypi-publish#usage
   pypi-publish:
-    if: ${{ startsWith(github.ref, 'refs/tags') }}
     name: Build, Lint, Test, Release to PyPI
     runs-on: ubuntu-latest
     environment:
@@ -50,3 +47,19 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    name: GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="$TAG" \
+            --generate-notes
