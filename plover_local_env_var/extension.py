@@ -25,7 +25,7 @@ class LocalEnvVar:
     """
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
-        self._env_var_values = config.load(_CONFIG_FILEPATH)
+        self._env_var_values = {}
 
     def start(self) -> None:
         """
@@ -36,6 +36,7 @@ class LocalEnvVar:
             "machine_state_changed",
             self._machine_state_changed
         )
+        self._env_var_values = config.load(_CONFIG_FILEPATH)
 
     def stop(self) -> None:
         """
