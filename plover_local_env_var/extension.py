@@ -25,7 +25,7 @@ class LocalEnvVar:
     """
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
-        self._env_var_values = {}
+        self._env_var_values: dict[str, str] = {}
 
     def start(self) -> None:
         """
