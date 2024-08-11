@@ -148,6 +148,13 @@ plover -s plover_plugins install .
 > of Plover. See the [Invoke Plover from the command line][] page for details on
 > how to create that reference.
 
+When necessary, the plugin can be uninstalled via the command line with the
+following command:
+
+```console
+plover --script plover_plugins uninstall plover-local-env-var
+```
+
 [AppleScript]: https://en.wikipedia.org/wiki/AppleScript
 [Build Status image]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml
