@@ -1,5 +1,6 @@
 """
-Env Var - a module for dealing with fetching local ENV var values.
+Expander - a module for dealing with fetching and expanding local ENV var
+values.
 """
 import os
 import re

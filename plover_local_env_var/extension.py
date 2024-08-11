@@ -7,13 +7,18 @@ Plover entry point extension module for Plover Local Env Var.
 from pathlib import Path
 
 from plover.engine import StenoEngine
-from plover.formatting import _Action, _Context
+from plover.formatting import (
+    _Action,
+    _Context
+)
 from plover.machine.base import STATE_RUNNING
 from plover.oslayer.config import CONFIG_DIR
 from plover.registry import registry
 
-from . import config
-from . import env_var
+from . import (
+    config,
+    env_var
+)
 
 
 _CONFIG_FILEPATH = Path(CONFIG_DIR) / "local_env_var.json"
