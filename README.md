@@ -141,7 +141,7 @@ After making any code changes, deploy the plugin into Plover with the following
 command:
 
 ```console
-plover -s plover_plugins install .
+plover --script plover_plugins install --editable .
 ```
 
 > Where `plover` in the command is a reference to your locally installed version
