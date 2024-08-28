@@ -139,6 +139,14 @@ coverage html
 open htmlcov/index.html
 ```
 
+If you are a [`just`][] user, you may find the [`justfile`][] useful during
+development in running multiple test commands. You can run the following command
+from the project root directory:
+
+```console
+just --working-directory . --justfile test/justfile
+```
+
 ### Deploying Changes
 
 After making any code changes, deploy the plugin into Plover with the following
@@ -170,6 +178,8 @@ plover --script plover_plugins uninstall plover-local-env-var
 [git]: https://git-scm.com/
 [interactive mode]: https://www.gnu.org/software/bash/manual/html_node/Interactive-Shell-Behavior.html
 [Invoke Plover from the command line]: https://github.com/openstenoproject/plover/wiki/Invoke-Plover-from-the-command-line
+[`just`]: https://github.com/casey/just
+[`justfile`]: ./test/justfile
 [linting image]: https://img.shields.io/badge/linting-pylint-yellowgreen
 [linting url]: https://github.com/pylint-dev/pylint
 ["man-in-the-middle"]: https://en.wikipedia.org/wiki/Man-in-the-middle_attack
@@ -178,6 +188,7 @@ plover --script plover_plugins uninstall plover-local-env-var
 [Mypy]: https://github.com/python/mypy
 [`osascript`]: https://ss64.com/osx/osascript.html
 [Plover]: https://www.openstenoproject.org/
+[plover_local_env_var project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_local_env_var.yml
 [Plover Run Shell]: https://github.com/user202729/plover_run_shell
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint
