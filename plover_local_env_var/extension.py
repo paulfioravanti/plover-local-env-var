@@ -21,16 +21,19 @@ from . import (
 )
 
 
-_CONFIG_FILEPATH = Path(CONFIG_DIR) / "local_env_var.json"
+_CONFIG_FILEPATH: Path = Path(CONFIG_DIR) / "local_env_var.json"
 
 class LocalEnvVar:
     """
     Extension class that also registers a meta plugin.
     The meta deals with fetching local env var values.
     """
+    _engine: StenoEngine
+    _env_var_values: dict[str, str]
+
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
-        self._env_var_values: dict[str, str] = {}
+        self._env_var_values = {}
 
     def start(self) -> None:
         """
@@ -60,6 +63,7 @@ class LocalEnvVar:
         if not argument:
             raise ValueError("No $ENV_VAR provided")
 
+        env_var_value: str
         try:
             env_var_value = self._env_var_values[argument]
         except KeyError:
@@ -70,7 +74,7 @@ class LocalEnvVar:
                 sorted(self._env_var_values.keys())
             )
 
-        action = ctx.new_action()
+        action: _Action = ctx.new_action()
         action.text = env_var_value
         return action
 
