@@ -98,7 +98,11 @@ Clone from GitHub with [git][]:
 ```console
 git clone git@github.com:paulfioravanti/plover-local-env-var.git
 cd plover-local-env-var
+python -m pip install --editable ".[test]"
 ```
+
+If you are a [Tmuxinator][] user, you may find my [plover_local_env_var project
+file][] of reference.
 
 ### Python Version
 
@@ -184,4 +188,5 @@ plover --script plover_plugins uninstall plover-local-env-var
 [pytest-cov]: https://github.com/pytest-dev/pytest-cov/
 [`.scpt`]: https://fileinfo.com/extension/scpt
 [shell configuration file]: https://en.wikipedia.org/wiki/Unix_shell#Configuration_files
+[Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
