@@ -1,0 +1,6 @@
+{
+  "env_var_names": [
+    "$ENV:FOO",
+    "$ENV:BAR"
+  ]
+}

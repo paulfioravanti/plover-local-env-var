@@ -4,14 +4,17 @@ values.
 """
 import os
 import re
-from typing import Pattern
+from typing import (
+    Callable,
+    Optional,
+    Pattern
+)
 
 
 _ENV_VAR: Pattern[str] = re.compile(r"(\$[A-Za-z_][A-Za-z_0-9]*)")
-_DEFAULT_SHELL: str = "bash"
 _VAR_DIVIDER: str = "##"
 
-def expand(var: str) -> str:
+def expand(shell_command: Callable[[str], str], var: str) -> str:
     """
     Fetches and returns a single local env var value.
 
@@ -21,14 +24,14 @@ def expand(var: str) -> str:
     if not re.match(_ENV_VAR, var):
         raise ValueError(f"Provided value not an $ENV_VAR: {var}")
 
-    expanded: str = _perform_expansion(var)
-
-    if not expanded:
-        raise ValueError(f"No value found for env var: {var}")
+    expanded: str = _perform_expansion(shell_command, var)
 
     return expanded
 
-def expand_list(env_var_name_list: list[str]) -> dict[str, str]:
+def expand_list(
+    shell_command: Callable[[str], str],
+    env_var_name_list: list[str]
+) -> dict[str, str]:
     """
     Returns a dict of env var values from a list of env var names.
 
@@ -42,7 +45,7 @@ def expand_list(env_var_name_list: list[str]) -> dict[str, str]:
         if re.match(_ENV_VAR, var_name)
     ]
     var_names: str = _VAR_DIVIDER.join(parsed_env_var_name_list)
-    expanded: str = _perform_expansion(var_names)
+    expanded: str = _perform_expansion(shell_command, var_names)
     env_vars: dict[str, str] = dict(
         zip(parsed_env_var_name_list, expanded.split(_VAR_DIVIDER))
     )
@@ -54,11 +57,11 @@ def expand_list(env_var_name_list: list[str]) -> dict[str, str]:
 
     return valid_env_vars
 
-def _perform_expansion(target: str) -> str:
-    # NOTE: Entire shell path cannot be used because Plover's shell location may
-    # not be the same as the user's machine.
-    shell: str = os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-    # NOTE: Using an interactive mode command (bash/zsh/fish -ic) seemed to be
-    # the only way to access a user's env vars on a Mac outside Plover's
-    # environment.
-    return os.popen(f"{shell} -ic 'echo {target}'").read().strip()
+def _perform_expansion(shell_command: Callable[[str], str], target: str) -> str:
+    command: str = shell_command(target)
+    expanded: Optional[str] = os.popen(command).read().strip()
+
+    if not expanded:
+        raise ValueError(f"No value found for env var: {target}")
+
+    return expanded

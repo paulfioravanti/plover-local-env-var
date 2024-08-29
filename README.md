@@ -51,42 +51,22 @@ configuration file][], you can use them in your outlines with the `ENV_VAR`
 meta. For an environment variable named `$PHONE_NUMBER`, the outline would look
 like:
 
+**macOS or Linux**
+
 ```json
 "{:ENV_VAR:$PHONE_NUMBER}"
+```
+
+**Windows**
+
+```json
+"{:ENV_VAR:$ENV:PHONE_NUMBER}"
 ```
 
 Pressing the "Disconnect and reconnect the machine" button on the Plover UI
 resets the environment variable cache. If you make any changes to the values
 contained in your environment variables, make sure to press it so they get
 re-read in again.
-
-## Why a Plugin?
-
-I used to access environment variables from a steno outline like in this
-example:
-
-```json
-"PHAEUL/PHAEUL": "{:COMMAND:SHELL:bash -ci 'osascript $STENO_DICTIONARIES/src/command/actions/output-env-var.scpt EMAIL'}"
-```
-
-This solution does the following:
-
-- uses the [Plover Run Shell][] plugin to run a shell command from Python
-- calls `bash` in [interactive mode][] (`-i`) so that the command can see
-  [environment variables][] (`$STENO_DICTIONARIES` in this case) defined outside
-  of the Plover environment
-- gets `bash` to use the [`osascript`][] command-line tool to load in and run
-  the target compiled [AppleScript][] ([`.scpt`][]) file
-- The AppleScript in question would then call out to the shell to fetch the
-  `$EMAIL` env var, and keystroke it out to the screen
-
-This stack of `Python->Shell->AppleScript->Shell` is convoluted and just not the
-right tool for the job at hand. Plover Local Env Var just uses Python and Shell,
-and reduces the outline above to be just:
-
-```json
-"PHAEUL/PHAEUL": "{:ENV_VAR:$EMAIL}"
-```
 
 All the fetched values also get cached, so subsequent calls to the same env var
 get returned quicker.
@@ -167,7 +147,6 @@ following command:
 plover --script plover_plugins uninstall plover-local-env-var
 ```
 
-[AppleScript]: https://en.wikipedia.org/wiki/AppleScript
 [Build Status image]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml
 [Coverage.py]: https://github.com/nedbat/coveragepy
@@ -176,7 +155,6 @@ plover --script plover_plugins uninstall plover-local-env-var
 [exporting]: https://en.wikipedia.org/wiki/Environment_variable#Assignment:_Unix
 [extension]: https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
 [git]: https://git-scm.com/
-[interactive mode]: https://www.gnu.org/software/bash/manual/html_node/Interactive-Shell-Behavior.html
 [Invoke Plover from the command line]: https://github.com/openstenoproject/plover/wiki/Invoke-Plover-from-the-command-line
 [`just`]: https://github.com/casey/just
 [`justfile`]: ./test/justfile
@@ -186,10 +164,8 @@ plover --script plover_plugins uninstall plover-local-env-var
 [meta]: https://plover.readthedocs.io/en/latest/plugin-dev/metas.html
 [my steno dictionaries]: https://github.com/paulfioravanti/steno-dictionaries
 [Mypy]: https://github.com/python/mypy
-[`osascript`]: https://ss64.com/osx/osascript.html
 [Plover]: https://www.openstenoproject.org/
 [plover_local_env_var project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_local_env_var.yml
-[Plover Run Shell]: https://github.com/user202729/plover_run_shell
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint
 [PyPI downloads image]:https://img.shields.io/pypi/dm/plover-local-env-var
@@ -197,7 +173,6 @@ plover --script plover_plugins uninstall plover-local-env-var
 [PyPI url]: https://pypi.org/project/plover-local-env-var/
 [Pytest]: https://pytest.org/
 [pytest-cov]: https://github.com/pytest-dev/pytest-cov/
-[`.scpt`]: https://fileinfo.com/extension/scpt
 [shell configuration file]: https://en.wikipedia.org/wiki/Unix_shell#Configuration_files
 [Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml

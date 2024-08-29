@@ -2,13 +2,19 @@
 Module to handle reading in the application JSON config file.
 """
 from pathlib import Path
-from typing import Any
+from typing import (
+    Any,
+    Callable
+)
 
 from .. import env_var
 from . import file
 
 
-def load(config_filepath: Path) -> dict[str, str]:
+def load(
+    shell_command: Callable[[str], str],
+    config_filepath: Path
+) -> dict[str, str]:
     """
     Reads in the config JSON file and expands each variable.
 
@@ -19,7 +25,10 @@ def load(config_filepath: Path) -> dict[str, str]:
     if not config_env_var_names:
         return {}
 
-    env_vars: dict[str, str] = env_var.expand_list(config_env_var_names)
+    env_vars: dict[str, str] = env_var.expand_list(
+        shell_command,
+        config_env_var_names
+    )
     _save_any_changes(config_filepath, config_env_var_names, env_vars)
     return env_vars
 
