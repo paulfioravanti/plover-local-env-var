@@ -26,13 +26,29 @@ def mock_popen_read(mocker):
     return _method
 
 @pytest.fixture()
-def bash_command():
-    return lambda env_var: "bash -ic 'echo {0}'".format(env_var)
+def shell_command():
+    def _method(shell):
+        return lambda env_var: f"{shell} -ic 'echo {env_var}'"
 
-@pytest.fixture()
-def powershell_command():
-    return lambda env_var: (
-        "echo $ExecutionContext.InvokeCommand.ExpandString({0})".format(env_var)
+    return _method
+
+def test_resolve_shell_command_for_windows(monkeypatch, powershell_command):
+    monkeypatch.setattr("platform.system", lambda: "Windows")
+
+    # REF: https://stackoverflow.com/a/20059029/567863
+    assert (
+        env_var.resolve_command().__code__.co_code
+        == powershell_command.__code__.co_code
+    )
+
+def test_resolve_shell_command_for_mac_or_linux(monkeypatch, shell_command):
+    monkeypatch.setattr("platform.system", lambda: "Darwin")
+    monkeypatch.setattr(os, "getenv", lambda _shell, _default_shell: "bash")
+
+    # REF: https://stackoverflow.com/a/20059029/567863
+    assert (
+        env_var.resolve_command().__code__.co_code
+        == shell_command("bash").__code__.co_code
     )
 
 def test_var_not_a_dollar_env_var(bash_command):

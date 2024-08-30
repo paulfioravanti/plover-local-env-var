@@ -4,6 +4,9 @@
 A package dealing with:
     - expanding local environment variables and returning their values
 """
+from .command import (
+    resolve_command
+)
 from .expander import (
     expand,
     expand_list
@@ -11,5 +14,6 @@ from .expander import (
 
 __all__ = [
     "expand",
-    "expand_list"
+    "expand_list",
+    "resolve_command"
 ]

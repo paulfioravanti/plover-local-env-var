@@ -76,16 +76,6 @@ def mock_popen_read(mocker):
 
     return _method
 
-@pytest.fixture()
-def bash_command():
-    return lambda env_var: "bash -ic 'echo {0}'".format(env_var)
-
-@pytest.fixture()
-def powershell_command():
-    return lambda env_var: (
-        "echo $ExecutionContext.InvokeCommand.ExpandString({0})".format(env_var)
-    )
-
 # Tests
 
 def test_bad_config(bad_config_path, bash_command):

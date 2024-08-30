@@ -4,9 +4,7 @@ Plover entry point extension module for Plover Local Env Var.
     - https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
-import os
 from pathlib import Path
-import platform
 from typing import Callable
 
 from plover.engine import StenoEngine
@@ -25,16 +23,6 @@ from . import (
 
 
 _CONFIG_FILEPATH: Path = Path(CONFIG_DIR) / "local_env_var.json"
-_DEFAULT_SHELL: str = "bash"
-_POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
-    f"echo $ExecutionContext.InvokeCommand.ExpandString({env_var})"
-)
-# NOTE: Using an interactive mode command (bash/zsh/fish -ic) seemed to be
-# the only way to access a user's env vars on a Mac outside Plover's
-# environment.
-_SHELL_COMMAND: Callable[[str], Callable[[str], str]] = lambda shell: (
-    lambda env_var: f"{shell} -ic 'echo {env_var}'"
-)
 
 class LocalEnvVar:
     """
@@ -52,7 +40,7 @@ class LocalEnvVar:
         """
         Sets up the meta plugin and steno engine hooks
         """
-        self._shell_command = LocalEnvVar._determine_platform_command()
+        self._shell_command = env_var.resolve_command()
         self._env_var_values = config.load(
             self._shell_command,
             _CONFIG_FILEPATH
@@ -70,15 +58,6 @@ class LocalEnvVar:
         self._engine.hook_disconnect(
             "machine_state_changed",
             self._machine_state_changed
-        )
-
-    @staticmethod
-    def _determine_platform_command() -> Callable[[str], str]:
-        if platform.system() == "Windows":
-            return _POWERSHELL_COMMAND
-
-        return _SHELL_COMMAND(
-            os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
         )
 
     def _env_var(self, ctx: _Context, argument: str) -> _Action:
