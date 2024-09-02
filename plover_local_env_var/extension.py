@@ -22,7 +22,7 @@ from . import (
 )
 
 
-_CONFIG_FILEPATH: Path = Path(CONFIG_DIR) / "local_env_var.json"
+_CONFIG_FILE: Path = Path(CONFIG_DIR) / config.CONFIG_BASENAME
 
 class LocalEnvVar:
     """
@@ -41,10 +41,7 @@ class LocalEnvVar:
         Sets up the meta plugin and steno engine hooks
         """
         self._shell_command = env_var.resolve_command()
-        self._env_var_values = config.load(
-            self._shell_command,
-            _CONFIG_FILEPATH
-        )
+        self._env_var_values = config.load(self._shell_command, _CONFIG_FILE)
         registry.register_plugin("meta", "ENV_VAR", self._env_var)
         self._engine.hook_connect(
             "machine_state_changed",
@@ -77,10 +74,7 @@ class LocalEnvVar:
                 argument
             )
             self._env_var_values[argument] = env_var_value
-            config.save(
-                _CONFIG_FILEPATH,
-                sorted(self._env_var_values.keys())
-            )
+            config.save(_CONFIG_FILE, sorted(self._env_var_values.keys()))
 
         action: _Action = ctx.new_action()
         action.text = env_var_value
@@ -99,5 +93,5 @@ class LocalEnvVar:
         if machine_state == STATE_RUNNING:
             self._env_var_values = config.load(
                 self._shell_command,
-                _CONFIG_FILEPATH
+                _CONFIG_FILE
             )

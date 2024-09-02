@@ -5,6 +5,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+
+CONFIG_BASENAME: str = "local_env_var.json"
+
 def load(filepath: Path) -> dict[str, Any]:
     """
     Reads in data from a JSON file
