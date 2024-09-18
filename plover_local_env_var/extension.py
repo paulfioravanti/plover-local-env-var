@@ -69,10 +69,7 @@ class LocalEnvVar:
         try:
             env_var_value = self._env_var_values[argument]
         except KeyError:
-            env_var_value = env_var.expand(
-                self._shell_command,
-                argument
-            )
+            env_var_value = env_var.expand(self._shell_command, argument)
             self._env_var_values[argument] = env_var_value
             config.save(_CONFIG_FILE, sorted(self._env_var_values.keys()))
 
