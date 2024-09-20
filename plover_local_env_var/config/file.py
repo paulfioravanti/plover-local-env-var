@@ -6,8 +6,6 @@ from pathlib import Path
 from typing import Any
 
 
-CONFIG_BASENAME: str = "local_env_var.json"
-
 def load(filepath: Path) -> dict[str, Any]:
     """
     Reads in data from a JSON file
@@ -26,7 +24,7 @@ def load(filepath: Path) -> dict[str, Any]:
 
     return data
 
-def save(filepath: Path, data: dict[str, list[str]]) -> None:
+def save(filepath: Path, data: dict[str, Any]) -> None:
     """
     Saves a dictionary to a JSON file.
     """

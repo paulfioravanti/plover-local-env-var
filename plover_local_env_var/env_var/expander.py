@@ -49,13 +49,12 @@ def expand_list(
     env_vars: dict[str, str] = dict(
         zip(parsed_env_var_name_list, expanded.split(_VAR_DIVIDER))
     )
-    valid_env_vars: dict[str, str] = {
+
+    return {
         key: value
         for (key, value) in env_vars.items()
         if value
     }
-
-    return valid_env_vars
 
 def _perform_expansion(shell_command: Callable[[str], str], target: str) -> str:
     command: str = shell_command(target)
