@@ -2,6 +2,7 @@
 Expander - a module for dealing with fetching and expanding local ENV var
 values.
 """
+
 import os
 import re
 from typing import (

@@ -4,6 +4,7 @@ Plover entry point extension module for Plover Local Env Var.
     - https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
+
 from pathlib import Path
 from typing import Callable
 
@@ -29,6 +30,7 @@ class LocalEnvVar:
     Extension class that also registers a meta plugin.
     The meta deals with fetching local env var values.
     """
+
     _engine: StenoEngine
     _env_var_values: dict[str, str]
     _shell_command: Callable[[str], str]

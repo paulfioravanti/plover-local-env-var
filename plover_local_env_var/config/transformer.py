@@ -4,6 +4,7 @@ Transformer
 Module to handle transforming information from the application JSON config file
 into a form the application can work with.
 """
+
 from typing import Any
 
 def transform_inbound(data: dict[str, Any]) -> list[str]:

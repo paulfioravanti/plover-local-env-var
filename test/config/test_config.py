@@ -1,82 +1,9 @@
 import json
 import os
-from pathlib import Path
 import pytest
 
 from plover_local_env_var import config
 
-
-# Files
-
-@pytest.fixture
-def bad_config_path():
-    return (Path(__file__).parent / "files/bad_json_data.json").resolve()
-
-@pytest.fixture
-def non_existent_config_path():
-    return (Path(__file__).parent / "files/non_existent.json").resolve()
-
-@pytest.fixture
-def non_array_env_var_names_config_path():
-    return (
-        (Path(__file__).parent / "files/non_array_env_var_names.json").resolve()
-    )
-
-@pytest.fixture
-def valid_env_var_names_mac_linux_config_path():
-    path = (
-        Path(__file__).parent / "files/valid_env_var_names_mac_linux.json"
-    ).resolve()
-    with path.open(encoding="utf-8") as file:
-        config_data = json.load(file)
-        file.close()
-
-    yield path
-
-    with path.open("w", encoding="utf-8") as file:
-        json.dump(config_data, file, indent=2)
-        file.close()
-
-@pytest.fixture
-def valid_env_var_names_windows_config_path():
-    path = (
-        Path(__file__).parent / "files/valid_env_var_names_windows.json"
-    ).resolve()
-    with path.open(encoding="utf-8") as file:
-        config_data = json.load(file)
-        file.close()
-
-    yield path
-
-    with path.open("w", encoding="utf-8") as file:
-        json.dump(config_data, file, indent=2)
-        file.close()
-
-# Other fixture types
-
-# NOTE: Given that the command passed in to `os.popen` will be different
-# between Windows and non-Windows:
-#
-# `echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)`
-#
-# vs
-#
-# `bash -ic 'echo $FOO'`
-#
-# This mock handwaves over how that command works, and what it returns, and
-# instead just gives back a the `return_value` passed in that we're reasonably
-# sure we're expecting back from `os.popen.read`.
-@pytest.fixture()
-def mock_popen_read(mocker):
-    mock = mocker.Mock()
-    mocker.patch("os.popen", return_value=mock)
-
-    def _method(return_value=None):
-        mock.read.return_value = return_value
-
-    return _method
-
-# Tests
 
 def test_bad_config(bad_config_path, bash_command):
     with pytest.raises(
@@ -109,9 +36,9 @@ def test_expanding_existing_env_vars_on_windows(
         valid_env_var_names_windows_config_path
     )
 
-    assert loaded_config == {"$ENV:FOO": "baz", "$ENV:BAR": "quux"}
+    assert loaded_config == {"$ENV:BAR": "baz", "$ENV:FOO": "quux"}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO##$ENV:BAR)"
+        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
     )
 
     # No change to original config file
@@ -137,8 +64,8 @@ def test_expanding_existing_env_vars_on_mac_or_linux(
         valid_env_var_names_mac_linux_config_path
     )
 
-    assert loaded_config == {"$FOO": "baz", "$BAR": "quux"}
-    spy.assert_called_once_with("bash -ic 'echo $FOO##$BAR'")
+    assert loaded_config == {"$BAR": "baz", "$FOO": "quux"}
+    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
 
     # No change to original config file
     with valid_env_var_names_mac_linux_config_path.open(
@@ -165,7 +92,7 @@ def test_expanding_non_existent_env_vars_on_windows(
 
     assert loaded_config == {}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO##$ENV:BAR)"
+        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
     )
 
     # Original config file has been blanked out
@@ -192,7 +119,7 @@ def test_expanding_non_existent_env_vars_on_mac_or_linux(
     )
 
     assert loaded_config == {}
-    spy.assert_called_once_with("bash -ic 'echo $FOO##$BAR'")
+    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
 
     # Original config file has been blanked out
     with valid_env_var_names_mac_linux_config_path.open(
@@ -217,9 +144,9 @@ def test_expanding_some_existing_env_vars_on_windows(
         valid_env_var_names_windows_config_path
     )
 
-    assert loaded_config == {"$ENV:FOO": "baz"}
+    assert loaded_config == {"$ENV:BAR": "baz"}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO##$ENV:BAR)"
+        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
     )
 
     # Original config file has had null variable BAR removed from it
@@ -230,7 +157,7 @@ def test_expanding_some_existing_env_vars_on_windows(
         file.close()
     config_env_var_names = data.get("env_var_names", [])
 
-    assert config_env_var_names == ["$ENV:FOO"]
+    assert config_env_var_names == ["$ENV:BAR"]
 
 def test_expanding_some_existing_env_vars_on_mac_or_linux(
     mock_popen_read,
@@ -238,7 +165,7 @@ def test_expanding_some_existing_env_vars_on_mac_or_linux(
     bash_command,
     valid_env_var_names_mac_linux_config_path,
 ):
-    mock_popen_read(return_value="baz##")
+    mock_popen_read(return_value="##baz")
     spy = mocker.spy(os, "popen")
     loaded_config = config.load(
         bash_command,
@@ -246,7 +173,7 @@ def test_expanding_some_existing_env_vars_on_mac_or_linux(
     )
 
     assert loaded_config == {"$FOO": "baz"}
-    spy.assert_called_once_with("bash -ic 'echo $FOO##$BAR'")
+    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
 
     # Original config file has had null variable BAR removed from it
     with valid_env_var_names_mac_linux_config_path.open(

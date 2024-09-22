@@ -1,6 +1,6 @@
 {
   "env_var_names": [
-    "$FOO",
-    "$BAR"
+    "$BAR",
+    "$FOO"
   ]
 }

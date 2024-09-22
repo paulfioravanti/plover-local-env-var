@@ -2,6 +2,7 @@
 Command - a module for resolving the platform-appropriate command to fetch
 environment variables.
 """
+
 import os
 import platform
 from typing import Callable
