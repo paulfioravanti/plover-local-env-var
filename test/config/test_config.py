@@ -38,7 +38,8 @@ def test_expanding_existing_env_vars_on_windows(
 
     assert loaded_config == {"$ENV:BAR": "baz", "$ENV:FOO": "quux"}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
     )
 
     # No change to original config file
@@ -92,7 +93,8 @@ def test_expanding_non_existent_env_vars_on_windows(
 
     assert loaded_config == {}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
     )
 
     # Original config file has been blanked out
@@ -146,7 +148,8 @@ def test_expanding_some_existing_env_vars_on_windows(
 
     assert loaded_config == {"$ENV:BAR": "baz"}
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
     )
 
     # Original config file has had null variable BAR removed from it

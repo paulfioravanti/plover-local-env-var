@@ -10,7 +10,8 @@ from typing import Callable
 
 _DEFAULT_SHELL: str = "bash"
 _POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
-    f"echo $ExecutionContext.InvokeCommand.ExpandString({env_var})"
+    "powershell -command "
+    f"\"$ExecutionContext.InvokeCommand.ExpandString({env_var})\""
 )
 # NOTE: Using an interactive mode command (bash/zsh/fish -ic) seemed to be
 # the only way to access a user's env vars on a Mac outside Plover's

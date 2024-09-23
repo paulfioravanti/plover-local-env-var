@@ -58,7 +58,8 @@ def test_no_value_for_var_found_on_windows(
         env_var.expand(powershell_command, "$ENV:FOO")
 
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\""
     )
 
 def test_returns_expanded_value_of_found_env_var_on_mac_or_linux(
@@ -82,5 +83,6 @@ def test_returns_expanded_value_of_found_env_var_on_windows(
 
     assert env_var.expand(powershell_command, "$ENV:FOO") == "Bar"
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\""
     )
