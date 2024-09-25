@@ -3,19 +3,19 @@ Expander - a module for dealing with fetching and expanding local ENV var
 values.
 """
 
-import os
 import re
 from typing import (
     Callable,
-    Optional,
     Pattern
 )
+
+from . import command
 
 
 _ENV_VAR: Pattern[str] = re.compile(r"(\$[A-Za-z_][A-Za-z_0-9]*)")
 _VAR_DIVIDER: str = "##"
 
-def expand(shell_command: Callable[[str], str], var: str) -> str:
+def expand(shell_command_resolver: Callable[[str], str], var: str) -> str:
     """
     Fetches and returns a single local env var value.
 
@@ -25,12 +25,12 @@ def expand(shell_command: Callable[[str], str], var: str) -> str:
     if not re.match(_ENV_VAR, var):
         raise ValueError(f"Provided value not an $ENV_VAR: {var}")
 
-    expanded: str = _perform_expansion(shell_command, var)
+    expanded: str = _perform_expansion(shell_command_resolver, var)
 
     return expanded
 
 def expand_list(
-    shell_command: Callable[[str], str],
+    shell_command_resolver: Callable[[str], str],
     env_var_name_list: list[str]
 ) -> dict[str, str]:
     """
@@ -46,7 +46,7 @@ def expand_list(
         if re.match(_ENV_VAR, var_name)
     ]
     var_names: str = _VAR_DIVIDER.join(parsed_env_var_name_list)
-    expanded: str = _perform_expansion(shell_command, var_names)
+    expanded: str = _perform_expansion(shell_command_resolver, var_names)
     env_vars: dict[str, str] = dict(
         zip(parsed_env_var_name_list, expanded.split(_VAR_DIVIDER))
     )
@@ -57,9 +57,11 @@ def expand_list(
         if value
     }
 
-def _perform_expansion(shell_command: Callable[[str], str], target: str) -> str:
-    command: str = shell_command(target)
-    expanded: Optional[str] = os.popen(command).read().strip()
+def _perform_expansion(
+    shell_command_resolver: Callable[[str], str],
+    target: str
+) -> str:
+    expanded: str = command.run_command(shell_command_resolver, target)
 
     if not expanded:
         raise ValueError(f"No value found for env var: {target}")

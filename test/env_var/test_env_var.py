@@ -1,5 +1,6 @@
 import os
 import pytest
+import subprocess
 
 from plover_local_env_var import env_var
 
@@ -31,25 +32,31 @@ def test_var_not_a_dollar_env_var(bash_command):
         env_var.expand(bash_command, "FOO")
 
 def test_no_value_for_var_found_on_mac_on_linux(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     bash_command
 ):
-    mock_popen_read(return_value="")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="")
+    spy = mocker.spy(subprocess, "run")
 
     with pytest.raises(ValueError, match="No value found for env var: \\$FOO"):
         env_var.expand(bash_command, "$FOO")
 
-    spy.assert_called_once_with("bash -ic 'echo $FOO'")
+    spy.assert_called_once_with(
+        "bash -ic 'echo $FOO'",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    )
 
 def test_no_value_for_var_found_on_windows(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     powershell_command
 ):
-    mock_popen_read(return_value="")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="")
+    spy = mocker.spy(subprocess, "run")
 
     with pytest.raises(
         ValueError,
@@ -59,30 +66,44 @@ def test_no_value_for_var_found_on_windows(
 
     spy.assert_called_once_with(
         "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\""
+        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\"",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
     )
 
 def test_returns_expanded_value_of_found_env_var_on_mac_or_linux(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     bash_command
 ):
-    mock_popen_read(return_value="Bar")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="Bar")
+    spy = mocker.spy(subprocess, "run")
 
     assert env_var.expand(bash_command, "$FOO") == "Bar"
-    spy.assert_called_once_with("bash -ic 'echo $FOO'")
+    spy.assert_called_once_with(
+        "bash -ic 'echo $FOO'",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    )
 
 def test_returns_expanded_value_of_found_env_var_on_windows(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     powershell_command
 ):
-    mock_popen_read(return_value="Bar")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="Bar")
+    spy = mocker.spy(subprocess, "run")
 
     assert env_var.expand(powershell_command, "$ENV:FOO") == "Bar"
     spy.assert_called_once_with(
         "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\""
+        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)\"",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
     )

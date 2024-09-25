@@ -5,10 +5,10 @@ environment variables.
 
 import os
 import platform
+import subprocess
 from typing import Callable
 
 
-_DEFAULT_SHELL: str = "bash"
 _POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
     "powershell -command "
     f"\"$ExecutionContext.InvokeCommand.ExpandString({env_var})\""
@@ -19,6 +19,7 @@ _POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
 _SHELL_COMMAND: Callable[[str], Callable[[str], str]] = lambda shell: (
     lambda env_var: f"{shell} -ic 'echo {env_var}'"
 )
+_DEFAULT_SHELL: str = "bash"
 
 def resolve_command() -> Callable[[str], str]:
     """
@@ -30,3 +31,21 @@ def resolve_command() -> Callable[[str], str]:
     return _SHELL_COMMAND(
         os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
     )
+
+def run_command(
+    shell_command_resolver: Callable[[str], str],
+    target: str
+) -> str:
+    """
+    Runs a provided shell command against target in a subprocess.
+    """
+    command: str = shell_command_resolver(target)
+    result: str = subprocess.run(
+        command,
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    ).stdout.strip()
+
+    return result

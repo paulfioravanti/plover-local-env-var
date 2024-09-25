@@ -3,8 +3,6 @@ from pathlib import Path
 import pytest
 
 
-# Files
-
 @pytest.fixture
 def bad_config_path():
     return (Path(__file__).parent / "files/bad_json_data.json").resolve()

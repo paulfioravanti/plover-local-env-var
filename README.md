@@ -16,8 +16,7 @@ when filling in online forms etc, but I wouldn't want to share that info in
 
 So, in order to be able to share the outlines I use, but not the values
 contained in them, I put that kind of semi-secret information in environment
-variables, manage them with [direnv][], and use this plugin to access them in
-order to write them out.
+variables, and use this plugin to access them in order to write them out.
 
 > [!NOTE]
 > If you prefer to manually write out all your semi-secret information and/or
@@ -29,7 +28,9 @@ order to write them out.
 > outlines! Plover stands between when you write your keystrokes and when they
 > output on screen, fitting the very definition of a ["man-in-the-middle"][]
 > (see your `strokes.log` file for what Plover records by default). Use a
-> password manager.
+> password manager. If you use [1Password][], you may find the [Plover
+> 1Password][] plugin of use to safely retrieve your passwords from your steno
+> dictionary outlines.
 
 ## Install
 
@@ -147,10 +148,10 @@ following command:
 plover --script plover_plugins uninstall plover-local-env-var
 ```
 
+[1Password]: https://1password.com/
 [Build Status image]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-local-env-var/actions/workflows/ci.yml
 [Coverage.py]: https://github.com/nedbat/coveragepy
-[direnv]: https://direnv.net/
 [environment variables]: https://en.wikipedia.org/wiki/Environment_variable
 [exporting]: https://en.wikipedia.org/wiki/Environment_variable#Assignment:_Unix
 [extension]: https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
@@ -165,6 +166,7 @@ plover --script plover_plugins uninstall plover-local-env-var
 [my steno dictionaries]: https://github.com/paulfioravanti/steno-dictionaries
 [Mypy]: https://github.com/python/mypy
 [Plover]: https://www.openstenoproject.org/
+[Plover 1Password]: https://github.com/paulfioravanti/plover-1password
 [plover_local_env_var project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_local_env_var.yml
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint

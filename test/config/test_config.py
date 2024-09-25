@@ -1,6 +1,7 @@
 import json
 import os
 import pytest
+import subprocess
 
 from plover_local_env_var import config
 
@@ -24,13 +25,13 @@ def test_config_with_non_array_env_var_names(
         config.load(bash_command, non_array_env_var_names_config_path)
 
 def test_expanding_existing_env_vars_on_windows(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     powershell_command,
     valid_env_var_names_windows_config_path
 ):
-    mock_popen_read(return_value="baz##quux")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="baz##quux")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         powershell_command,
         valid_env_var_names_windows_config_path
@@ -39,7 +40,11 @@ def test_expanding_existing_env_vars_on_windows(
     assert loaded_config == {"$ENV:BAR": "baz", "$ENV:FOO": "quux"}
     spy.assert_called_once_with(
         "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
+        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
     )
 
     # No change to original config file
@@ -53,20 +58,26 @@ def test_expanding_existing_env_vars_on_windows(
     assert config_env_var_names == ["$ENV:BAR", "$ENV:FOO"]
 
 def test_expanding_existing_env_vars_on_mac_or_linux(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     bash_command,
     valid_env_var_names_mac_linux_config_path,
 ):
-    mock_popen_read(return_value="baz##quux")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="baz##quux")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         bash_command,
         valid_env_var_names_mac_linux_config_path
     )
 
     assert loaded_config == {"$BAR": "baz", "$FOO": "quux"}
-    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
+    spy.assert_called_once_with(
+        "bash -ic 'echo $BAR##$FOO'",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    )
 
     # No change to original config file
     with valid_env_var_names_mac_linux_config_path.open(
@@ -79,13 +90,13 @@ def test_expanding_existing_env_vars_on_mac_or_linux(
     assert config_env_var_names == ["$BAR", "$FOO"]
 
 def test_expanding_non_existent_env_vars_on_windows(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     powershell_command,
     valid_env_var_names_windows_config_path,
 ):
-    mock_popen_read(return_value="##")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="##")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         powershell_command,
         valid_env_var_names_windows_config_path
@@ -94,7 +105,11 @@ def test_expanding_non_existent_env_vars_on_windows(
     assert loaded_config == {}
     spy.assert_called_once_with(
         "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
+        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
     )
 
     # Original config file has been blanked out
@@ -108,20 +123,26 @@ def test_expanding_non_existent_env_vars_on_windows(
     assert config_env_var_names == []
 
 def test_expanding_non_existent_env_vars_on_mac_or_linux(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     bash_command,
     valid_env_var_names_mac_linux_config_path,
 ):
-    mock_popen_read(return_value="##")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="##")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         bash_command,
         valid_env_var_names_mac_linux_config_path
     )
 
     assert loaded_config == {}
-    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
+    spy.assert_called_once_with(
+        "bash -ic 'echo $BAR##$FOO'",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    )
 
     # Original config file has been blanked out
     with valid_env_var_names_mac_linux_config_path.open(
@@ -134,13 +155,13 @@ def test_expanding_non_existent_env_vars_on_mac_or_linux(
     assert config_env_var_names == []
 
 def test_expanding_some_existing_env_vars_on_windows(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     powershell_command,
     valid_env_var_names_windows_config_path,
 ):
-    mock_popen_read(return_value="baz##")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="baz##")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         powershell_command,
         valid_env_var_names_windows_config_path
@@ -149,7 +170,11 @@ def test_expanding_some_existing_env_vars_on_windows(
     assert loaded_config == {"$ENV:BAR": "baz"}
     spy.assert_called_once_with(
         "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\""
+        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
     )
 
     # Original config file has had null variable BAR removed from it
@@ -163,20 +188,26 @@ def test_expanding_some_existing_env_vars_on_windows(
     assert config_env_var_names == ["$ENV:BAR"]
 
 def test_expanding_some_existing_env_vars_on_mac_or_linux(
-    mock_popen_read,
+    mock_subprocess_run,
     mocker,
     bash_command,
     valid_env_var_names_mac_linux_config_path,
 ):
-    mock_popen_read(return_value="##baz")
-    spy = mocker.spy(os, "popen")
+    mock_subprocess_run(return_value="##baz")
+    spy = mocker.spy(subprocess, "run")
     loaded_config = config.load(
         bash_command,
         valid_env_var_names_mac_linux_config_path
     )
 
     assert loaded_config == {"$FOO": "baz"}
-    spy.assert_called_once_with("bash -ic 'echo $BAR##$FOO'")
+    spy.assert_called_once_with(
+        "bash -ic 'echo $BAR##$FOO'",
+        capture_output=True,
+        check=False,
+        encoding="utf-8",
+        shell=True
+    )
 
     # Original config file has had null variable BAR removed from it
     with valid_env_var_names_mac_linux_config_path.open(
