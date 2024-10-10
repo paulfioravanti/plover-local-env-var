@@ -39,12 +39,15 @@ def test_expanding_existing_env_vars_on_windows(
 
     assert loaded_config == {"$ENV:BAR": "baz", "$ENV:FOO": "quux"}
     spy.assert_called_once_with(
-        "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        [
+            "powershell",
+            "-command",
+            "$ExecutionContext.InvokeCommand.ExpandString("
+            "\"$ENV:BAR##$ENV:FOO\")"
+        ],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # No change to original config file
@@ -72,11 +75,10 @@ def test_expanding_existing_env_vars_on_mac_or_linux(
 
     assert loaded_config == {"$BAR": "baz", "$FOO": "quux"}
     spy.assert_called_once_with(
-        "bash -ic 'echo $BAR##$FOO'",
+        ["bash", "-ic", "echo $BAR##$FOO"],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # No change to original config file
@@ -104,12 +106,15 @@ def test_expanding_non_existent_env_vars_on_windows(
 
     assert loaded_config == {}
     spy.assert_called_once_with(
-        "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        [
+            "powershell",
+            "-command",
+            "$ExecutionContext.InvokeCommand.ExpandString("
+            "\"$ENV:BAR##$ENV:FOO\")"
+        ],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # Original config file has been blanked out
@@ -137,11 +142,10 @@ def test_expanding_non_existent_env_vars_on_mac_or_linux(
 
     assert loaded_config == {}
     spy.assert_called_once_with(
-        "bash -ic 'echo $BAR##$FOO'",
+        ["bash", "-ic", "echo $BAR##$FOO"],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # Original config file has been blanked out
@@ -169,12 +173,15 @@ def test_expanding_some_existing_env_vars_on_windows(
 
     assert loaded_config == {"$ENV:BAR": "baz"}
     spy.assert_called_once_with(
-        "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString($ENV:BAR##$ENV:FOO)\"",
+        [
+            "powershell",
+            "-command",
+            "$ExecutionContext.InvokeCommand.ExpandString("
+            "\"$ENV:BAR##$ENV:FOO\")"
+        ],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # Original config file has had null variable BAR removed from it
@@ -202,11 +209,10 @@ def test_expanding_some_existing_env_vars_on_mac_or_linux(
 
     assert loaded_config == {"$FOO": "baz"}
     spy.assert_called_once_with(
-        "bash -ic 'echo $BAR##$FOO'",
+        ["bash", "-ic", "echo $BAR##$FOO"],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
     # Original config file has had null variable BAR removed from it

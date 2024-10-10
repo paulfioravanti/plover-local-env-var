@@ -33,7 +33,7 @@ class LocalEnvVar:
 
     _engine: StenoEngine
     _env_var_values: dict[str, str]
-    _shell_command: Callable[[str], str]
+    _shell_command: Callable[[str], list[str]]
 
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine

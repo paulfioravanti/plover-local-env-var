@@ -15,7 +15,7 @@ from . import command
 _ENV_VAR: Pattern[str] = re.compile(r"(\$[A-Za-z_][A-Za-z_0-9]*)")
 _VAR_DIVIDER: str = "##"
 
-def expand(shell_command_resolver: Callable[[str], str], var: str) -> str:
+def expand(shell_command_resolver: Callable[[str], list[str]], var: str) -> str:
     """
     Fetches and returns a single local env var value.
 
@@ -30,7 +30,7 @@ def expand(shell_command_resolver: Callable[[str], str], var: str) -> str:
     return expanded
 
 def expand_list(
-    shell_command_resolver: Callable[[str], str],
+    shell_command_resolver: Callable[[str], list[str]],
     env_var_name_list: list[str]
 ) -> dict[str, str]:
     """
@@ -58,7 +58,7 @@ def expand_list(
     }
 
 def _perform_expansion(
-    shell_command_resolver: Callable[[str], str],
+    shell_command_resolver: Callable[[str], list[str]],
     target: str
 ) -> str:
     expanded: str = command.run_command(shell_command_resolver, target)

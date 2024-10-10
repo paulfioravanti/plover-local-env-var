@@ -16,7 +16,7 @@ from . import (
 
 
 def load(
-    shell_command: Callable[[str], str],
+    shell_command: Callable[[str], list[str]],
     config_filepath: Path
 ) -> dict[str, str]:
     """
